@@ -14,7 +14,7 @@ firebase.initializeApp(config);
 var database = firebase.database();
 // Current Time
     var currentTime = moment();
-    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+    console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
 
 //Button for adding train
 $("#submit-train").on("click", function(event) {
@@ -72,20 +72,27 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
   console.log(trainFrequency);
 
 
-
 //Calculate the Next Arrival based on current time of entry
-var trainArrival = moment().diff(moment.unix(trainTime), "time");
-var remainder = moment().diff(moment.unix(trainTime), "time") % trainFrequency;
+var trainArrival = moment().diff(moment.unix(trainTime), "minutes");
+var remainder = moment().diff(moment.unix(trainTime), "minutes") % trainFrequency;
 var minLeft = trainFrequency - remainder;
-console.log(trainArrival);
+
+//Prettify trainArrival
+var trainArrivalPretty = moment.unix(trainArrival).format("hh:mm a");
+
 
 //Calculate minutes away 
-var trainAway = moment().add(minLeft, "p").format("hh:mm");
+var trainAway = moment().add(minLeft, "m").format("hh:mm a");
+
+console.log(trainArrival);
+console.log (remainder);
+console.log (minLeft);
+console.log (trainArrivalPretty);
 console.log(trainAway);
 
 // Add each train's data into the table
-  $("#currentTrain").append("<tr><td>" + trainName + "</td><td>" + trainDestination + "</td><td>" +
-  trainFrequency + "</td><td>" + trainArrival + "</td><td>" + trainAway + "</td></tr>");
+  $("#currentTrain > tbody").append("<tr><td>" + trainName + "</td><td>" + trainDestination + "</td><td>" +
+  trainFrequency + "</td><td>" + trainArrivalPretty + "</td><td>" + trainAway + "</td></tr>");
 
 });
 
