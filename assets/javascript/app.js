@@ -13,8 +13,8 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 // Current Time
-    var currentTime = moment();
-    console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
+/*  var currentTime = moment();
+    console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));*/
 
 //Button for adding train
 $("#submit-train").on("click", function(event) {
@@ -44,7 +44,7 @@ $("#submit-train").on("click", function(event) {
   console.log(newTrain.frequency);
 
   // Alert
-  alert("Train successfully added");
+  //alert("Train successfully added");
 
   // Clears all of the text-boxes
   $("#name-input").val("");
@@ -72,17 +72,20 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
   console.log(trainFrequency);
 
 
-//Calculate the Next Arrival based on current time of entry
+//Calculate the Next Arrival based on current time
+
+//Difference in current time from start time
 var trainArrival = moment().diff(moment.unix(trainTime), "minutes");
+
+//find remainder between the difference in start 
 var remainder = moment().diff(moment.unix(trainTime), "minutes") % trainFrequency;
 var minLeft = trainFrequency - remainder;
 
 //Prettify trainArrival
-var trainArrivalPretty = moment.unix(trainArrival).format("hh:mm a");
-
+var trainArrivalPretty = moment.unix(trainArrival).format("hh:mm A");
 
 //Calculate minutes away 
-var trainAway = moment().add(minLeft, "m").format("hh:mm a");
+var trainAway = moment().add(minLeft, "m").format("X");
 
 console.log(trainArrival);
 console.log (remainder);
